@@ -15,30 +15,23 @@ class Advertenties extends Model
         'state',
         'description',
         'price',
-        'category',
         'lat',
         'lng',
-        'views',
-        'user_id'     
+        'user_id',
+        'category_id'     
     ];
     protected $table = 'advertenties';
    
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-
-    public static function boot()
+    public function category()
     {
-        parent::boot();
-    
-        static::retrieved(function ($table) {
-            $table->increment('views');
-        });
+        return $this->belongsTo(Category::class);
     }
-    
-   
 
     use HasFactory;
 }

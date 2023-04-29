@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PagesController;
 use \App\Http\Controllers\HomeController;
 use \App\Http\Controllers\AdvertentieController;
-use Illuminate\Support\Facades\Notification;
+use \App\Http\Controllers\Auth\UpdateProfileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,44 +16,21 @@ use Illuminate\Support\Facades\Notification;
 |
 */
 
-Route::get('/', [PagesController::class, 'index']);
-
+//Pages routes
+Route::get('/', [PagesController::class, 'index'])->name('index');
+Route::get('/about', [PagesController::class, 'about'])->name('about');
+Route::get('/contact', [PagesController::class, 'contact'])->name('contact');
+Route::get('/privacy', [PagesController::class, 'privacy'])->name('privacy');
+//Ads route
 Route::resource('advertentie', AdvertentieController::class);
-
+//Search route
 Route::get('/search', [AdvertentieController::class, 'search']);
-
-Route::get('/online-status', function () {
-    if (Auth::check()) {
-        $status = 'online';
-    } else {
-        $status = 'offline';
-    }
-    return response()->json(['status' => $status]);
- 
-});
-
-Route::post('/send-notification', function () {
-    // Send the notification to the user with ID 1
-    $user = User::find(1);
-    $user->notify(new UserNotification);
-
-    return 'Notification sent!';
-});
-
-
-
-
+//Auth routes
 Auth::routes();
-
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-// Route::get('/advertentie/{category?}/{item?}', function ($category = null, $item = null) {
-//     if(isset($category)){
-//      if(isset($item)){
-//          return "<h1>{$item}</h1>";
-//      }
-//      return "<h1>{$category}</h1>";
-//     }
-//     return '<h1>ADVERTENTIES</h1>';
-//  });
+//Home route
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Category route
+Route::get('/categorie/{category}', [AdvertentieController::class, 'category'])->name('advertentie.category');
+//UpdateProfile route
+Route::get('/update-profile', [UpdateProfileController::class, 'index'])->name('updateprofile');
+Route::post('/update-profile', [UpdateProfileController::class, 'update'])->name('updateprofile.update');

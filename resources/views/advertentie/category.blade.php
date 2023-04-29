@@ -1,17 +1,17 @@
 @extends('layouts.app')
-@section('title', 'Advertenties - ')
+@section('title', $category->name . ' - ')
 @section('content')
 
 <!-- advertenties -->
 <main class="py-2 px-1 w-full xl:w-3/4 md:w-2/3 sm:p-6 md:py-2 md:px-2 ">
   <div id="map" class="w-full z-10  rounded-lg shadow ">
-    <div data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" id='remove-directions' class="bg-neutral-50 hover:bg-gray-200 absolute right-0 bottom-4 w-8 h-8 cursor-pointer z-10 flex items-center justify-center rounded-lg m-2 border-solid border-2 "> <img src="src/direction(1).png" alt=""></div>
+    <div data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" id='remove-directions' class="bg-neutral-50 hover:bg-gray-200 absolute right-0 bottom-4 w-8 h-8 cursor-pointer z-10 flex items-center justify-center rounded-lg m-2 border-solid border-2 "> <img src="../src/direction(1).png" alt=""></div>
     <div id="tooltip-bottom" role="tooltip" class="inline-block z-10 py-2 px-3 text-sm font-medium text-white bg-zinc-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
       <ul>
         <li>1.Activeer direction: Klik eerst <br>
           <div class="flex flex-row">
             <div>op het button </div>
-            <div class="bg-white w-6 h-6 ml-2 cursor-pointer z-10 flex items-center justify-center shadow rounded-lg  border-solid border-2 border-indigo-60"> <img src="src/direction(1).png" alt=""></div>
+            <div class="bg-white w-6 h-6 ml-2 cursor-pointer  z-10 flex items-center justify-center shadow rounded-lg  border-solid border-2 border-indigo-60"> <img src="../src/direction(1).png" alt=""></div>
           </div>
         </li>
         <li>2.klik op twee verschillende plaatsen</li>
@@ -19,7 +19,7 @@
         <li>* Om de Navigatie uit te schakelen Klik weer <br>
           <div class="flex flex-row">
             <div>op het button </div>
-            <div class="bg-white w-6 h-6 ml-2 cursor-pointer z-10 flex items-center justify-center shadow rounded-lg  border-solid border-2 border-indigo-60"> <img src="src/direction(1).png" alt=""></div>
+            <div class="bg-white w-6 h-6 ml-2 cursor-pointer  z-10 flex items-center justify-center shadow rounded-lg  border-solid border-2 border-indigo-60"> <img src="../src/direction(1).png" alt=""></div>
           </div>
         </li>
       </ul>
@@ -44,31 +44,52 @@
   </div>
   @endif
   <div class="bg-transparent">
-    <!-- Sorteren form -->
-    <form action="{{ route('advertentie.index') }}" method="GET" class="w-full flex justify-end pt-5">
-      <div class="flex items-center space-x-2">
-        <label for="sort-select" class="text-gray-600 dark:text-gray-400">
-          Sorteren op:
-        </label>
-        <div class="relative">
-          <select name="sort" id="sort-select" onchange="this.form.submit()" class="block appearance-none w-full bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 px-4 py-2 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm">
-            <option value="price_asc" class="text-xs sm:text-sm" Request::get('sort')==='price_asc' ? 'selected' : '' }}>
-              Prijs (laag naar hoog)
-            </option>
-            <option value="price_desc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'price_desc' ? 'selected' : '' }}>
-              Prijs (hoog naar laag)
-            </option>
-            <option value="date_asc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'date_asc' ? 'selected' : '' }}>
-              Datum (oudste eerst)
-            </option>
-            <option value="date_desc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'date_desc' ? 'selected' : '' }}>
-              Datum (nieuwste eerst)
-            </option>
-          </select>
+    <div class="w-full flex justify-between pt-5">
+      <nav class="flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+            <a href="{{ route('advertentie.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white">
+              <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+              </svg>
+              Advertenties
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <p class="ml-1 text-sm font-semibold text-purple-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">{{ $category->name }}</p>
+            </div>
+          </li>
+        </ol>
+      </nav>
+      <!-- Sorteren form -->
+      <form action="{{ url()->current() }}" method="GET">
+        <div class="flex items-center space-x-2">
+          <label for="sort-select" class="text-gray-600 dark:text-gray-400">
+            Sorteren op:
+          </label>
+          <div class="relative">
+            <select name="sort" id="sort-select" onchange="this.form.submit()" class="block appearance-none w-full bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 px-4 py-2 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm">
+              <option value="price_asc" class="text-xs sm:text-sm" Request::get('sort')==='price_asc' ? 'selected' : '' }}>
+                Prijs (laag naar hoog)
+              </option>
+              <option value="price_desc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'price_desc' ? 'selected' : '' }}>
+                Prijs (hoog naar laag)
+              </option>
+              <option value="date_asc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'date_asc' ? 'selected' : '' }}>
+                Datum (oudste eerst)
+              </option>
+              <option value="date_desc" class="text-xs sm:text-sm" {{ Request::get('sort') === 'date_desc' ? 'selected' : '' }}>
+                Datum (nieuwste eerst)
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-    </form>
-
+      </form>
+    </div>
     <div class="mx-auto max-w-2xl py-4 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
       @if (count($ads) > 0)
 
@@ -86,10 +107,10 @@
 
         @endforeach
       </div>
-      <div class="container number mt-10 mx-auto">
+
+      <div class="container number mx-auto mt-10">
         <!-- page numbers -->
         {{ $ads->links('vendor.pagination.tailwind', ['class' => 'my-custom-pagination']) }}
-
       </div>
       @else
       <p>Geen Advertenties gevonden</p>
@@ -98,6 +119,7 @@
   </div>
 
 </main>
+
 <script>
 // Set Mapbox access token
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJvdWxkbyIsImEiOiJjanc3NWc4cWQxaWlwNDlubms3cTRkZDAwIn0.hRPJTjbBufd9HVTTpXW4zg';
@@ -106,10 +128,10 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWJvdWxkbyIsImEiOiJjanc3NWc4cWQxaWlwNDlubms3c
 const map = new mapboxgl.Map({
   container: 'map', // container element ID
   style: 'mapbox://styles/mapbox/light-v11', // map style
-  center: [5.623763947732192, 52.17114847745034], 
-  zoom: 5.6, 
-  pitch: 5, 
-  bearing: 35 
+  center: [5.623763947732192, 52.17114847745034], // initial center of map
+  zoom: 5.6, // initial zoom level of map
+  pitch: 5, // initial pitch of map
+  bearing: 35 // initial bearing of map
 });
 
 // Create locations object

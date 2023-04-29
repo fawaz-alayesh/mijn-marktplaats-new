@@ -30,17 +30,9 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {  
-        
-           
-         
-            $ads =  Advertenties::where('user_id', auth()->user()->id)->get();
-            
-            return view('home',compact('ads'));
-            
-    
-    }
-    
+    {
 
-    
+        $ads =  Advertenties::where('user_id', auth()->user()->id)->paginate(5);
+        return view('home', compact('ads'));
+    }
 }

@@ -1,43 +1,65 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import "flowbite";
+//this shows the selected image inplace of the image
+$(function () {
+    var loadFile = function (event) {
+        var output = $("#output")[0];
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src); // free memory
+        };
+    };
 
-import './bootstrap';
-import { createApp } from 'vue';
-
-/**
- * Next, we will create a fresh Vue application instance. You may then begin
- * registering components with the application instance so they are ready
- * to use in your application's views. An example is included for you.
- */
-
-const app = createApp({});
-
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
-//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
-// });
-
-/**
- * Finally, we will attach the application instance to a HTML element with
- * an "id" attribute of "app". This element is included with the "auth"
- * scaffolding. Otherwise, you will need to add an element yourself.
- */
-
-app.mount('#app');
+    $("#fileInput").on("change", loadFile);
+});
 
 
+$(function () {
+    $("#registerForm").submit(function (e) {
+        e.preventDefault();
+        let formData = $(this).serializeArray();
+        $(".invalid-feedback").children("strong").text("");
+        $("#registerForm input").removeClass("is-invalid");
+        $.ajax({
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+            },
+            url: "{{ route('register') }}",
+            data: formData,
+            success: () => window.location.assign("{{ route('home') }}"),
+            error: (response) => {
+                if (response.status === 422) {
+                    let errors = response.responseJSON.errors;
+                    Object.keys(errors).forEach(function (key) {
+                        $("#" + key + "Input").addClass("is-invalid");
+                        $("#" + key + "Error")
+                            .children("strong")
+                            .text(errors[key][0]);
+                    });
+                } else {
+                    window.location.reload();
+                }
+            },
+        });
+    });
+});
 
+// $("#currency").maskMoney({ formatOnBlur: true, reverse: true, precision: 2 });
 
+$(document).ready(function () {
+    $(".search").on("keyup", function () {
+        var value = $(this).val();
+        if (value) {
+            $.ajax({
+                type: "get",
+                url: "search",
+                data: { search: value },
+                success: function (data) {
+                    $("#Content").html(data);
+                },
+            });
+        } else if (value == "") {
+            $("#Content").html("");
+        }
+    });
+});
